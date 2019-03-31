@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_31_165546) do
+ActiveRecord::Schema.define(version: 2019_03_31_181059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "interactions", force: :cascade do |t|
+    t.bigint "reciprocator_id"
+    t.bigint "listing_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["listing_id"], name: "index_interactions_on_listing_id"
+    t.index ["reciprocator_id"], name: "index_interactions_on_reciprocator_id"
+  end
 
   create_table "listings", force: :cascade do |t|
     t.bigint "created_by_id"
@@ -104,6 +113,8 @@ ActiveRecord::Schema.define(version: 2019_03_31_165546) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  add_foreign_key "interactions", "listings"
+  add_foreign_key "interactions", "participants", column: "reciprocator_id"
   add_foreign_key "listings", "participants", column: "created_by_id"
   add_foreign_key "participants", "users"
   add_foreign_key "referral_codes", "participants"
