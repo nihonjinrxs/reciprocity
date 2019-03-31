@@ -1,6 +1,6 @@
 class ParticipantsController < ApplicationController
   def new
-    render react_component: 'participants/Form', props: {
+    render react_component: 'participants/forms/New', props: {
       form: {
         action: '/participants',
         method: 'post',
@@ -11,7 +11,8 @@ class ParticipantsController < ApplicationController
 
   def create
     Participant.create(participant_params.merge(user_id: current_user.id))
-    redirect_to profile_path
+    redirect_to interests_path
+    #redirect_to profile_path
   end
 
   def show
@@ -25,7 +26,7 @@ class ParticipantsController < ApplicationController
 
   def edit
     participant = Participant.find_by(user_id: user_id)
-    render react_component: 'participants/Form', props: participant_props(participant).merge(
+    render react_component: 'participants/forms/New', props: participant_props(participant).merge(
       form: {
         action: "/participants/#{user_id}",
         method: 'patch',
@@ -42,10 +43,22 @@ class ParticipantsController < ApplicationController
     redirect_to profile_path
   end
 
+  def interests
+    participant = Participant.find(participant_params['id'])
+    render react_component: 'participants/forms/Interests', props: {
+      interest_list: Participant::INTERESTS,
+      form: {
+        action: "/participants/#{participant.id}",
+        method: 'patch',
+        token: session[:_csrf_token]
+      }
+    }
+  end
+
   private
 
   def participant_params
-    params.permit(:id, :display_name, :about_me, :zip_code, :interest_list)
+    params.permit(:id, :display_name, :about_me, :zip_code, interest_list: [])
   end
 
   def participant_props(participant)
