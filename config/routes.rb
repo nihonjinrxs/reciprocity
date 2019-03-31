@@ -1,27 +1,31 @@
 Rails.application.routes.draw do
-  resources :referral_codes
   devise_for :users, controllers: {
-    registrations: 'users/registrations'
+    registrations: 'users/registrations',
+    sessions: 'users/sessions'
   }
 
   devise_scope :user do
     get 'register', to: 'users/registrations#new'
   end
 
-  get '/', to: 'home#index'
-  resources :participants, except: [:destroy]
+  get '/', to: 'home#show'
+  resources :participants, only: [:create, :update]
+  get '/profile', to: 'participants#show'
+  get '/profile/:id', to: 'participants#show'
+  get '/profile/new', to: 'participants#new'
+  get '/profile/edit', to: 'participants#edit'
+  get '/welcome', to: 'users#welcome'
 
   resources :listings
+  resources :home, only: [:show]
   # offering/wish/call_to_action are for url_helpers with STI
   resources :offerings, controller: 'listings', path: '/listings'
   resources :wish, controller: 'listings', path: '/listings'
   resources :call_to_action, controller: 'listings', path: '/listings'
 
-  get '/redeem', to: 'public_access#redeem'
-  post '/redeem', to: 'public_access#redeem'
-
   namespace :api do
     namespace :v1 do
+      resources :referral_codes
       resources :participants, only: [:index, :create, :destroy, :update]
     end
   end
