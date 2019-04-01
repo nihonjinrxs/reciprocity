@@ -5,7 +5,7 @@ class Participant < ApplicationRecord
 
   acts_as_taggable_on :interests
 
-  INTERESTS = %w(
+  INTERESTS = %w[
     Art
     Social\ Justice
     Family
@@ -30,5 +30,5 @@ class Participant < ApplicationRecord
     Food\ Justice
     Green\ Business
     Self\ Care
-  )
+  ].freeze
 end
