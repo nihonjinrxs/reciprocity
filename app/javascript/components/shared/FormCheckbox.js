@@ -7,18 +7,16 @@ const formCheckbox = ({
   name,
   value,
 }) => (
-  <div className="form-group">
-    <div className="custom-control custom-checkbox">
-      {/* TODO: implement 'checked' as a prop */}
-      <input
-        type="checkbox"
-        className="custom-control-input"
-        id={name+'-'+value}
-        name={name}
-        value={value}
-      />
-      <label className="custom-control-label" htmlFor={name+'-'+value}>{label}</label>
-    </div>
+  <div className="custom-control custom-checkbox">
+    {/* TODO: implement 'checked' as a prop */}
+    <input
+      type="checkbox"
+      className="custom-control-input"
+      id={name+'-'+value}
+      name={name}
+      value={value}
+    />
+    <label className="custom-control-label" htmlFor={name+'-'+value}>{label}</label>
   </div>
 )
 
@@ -35,4 +33,3 @@ formCheckbox.defaultProps = {
 }
 
 export default formCheckbox
-
